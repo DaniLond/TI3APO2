@@ -11,15 +11,19 @@ public class Weapon extends Drawing {
 
     private Image[] weapon;
 
+    private boolean isPickedUp= false;
+
     private boolean isFacingRight = false;
     private boolean isFacingDown = false;
     boolean isFacingUp = false;
     boolean isFacingLeft= false;
 
 
-    public Weapon(int x , int y) {
+    public Weapon(int type) {
         int i;
         String uri;
+        this.type= type;
+        this.weapon= new Image[4];
         if (type==1){
             for(i = 1; i <= 4; ++i) {
                 uri = "file:" + HelloApplication.class.getResource("Attack/Weapon/weaponUno/weapon-" + i + ".png").getPath();
@@ -44,5 +48,45 @@ public class Weapon extends Drawing {
         } else if (isFacingLeft) {
             gc.drawImage(this.weapon[1] , this.pos.getX(), this.pos.getY(), 25, 25 );
         }
+    }
+
+    public boolean isFacingRight() {
+        return isFacingRight;
+    }
+
+    public void setFacingRight(boolean facingRight) {
+        isFacingRight = facingRight;
+    }
+
+    public boolean isFacingDown() {
+        return isFacingDown;
+    }
+
+    public void setFacingDown(boolean facingDown) {
+        isFacingDown = facingDown;
+    }
+
+    public boolean isFacingUp() {
+        return isFacingUp;
+    }
+
+    public void setFacingUp(boolean facingUp) {
+        isFacingUp = facingUp;
+    }
+
+    public boolean isFacingLeft() {
+        return isFacingLeft;
+    }
+
+    public void setFacingLeft(boolean facingLeft) {
+        isFacingLeft = facingLeft;
+    }
+
+    public boolean isPickedUp() {
+        return isPickedUp;
+    }
+
+    public void setPickedUp(boolean pickedUp) {
+        isPickedUp = pickedUp;
     }
 }

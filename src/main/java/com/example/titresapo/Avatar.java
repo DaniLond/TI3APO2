@@ -1,5 +1,6 @@
 package com.example.titresapo;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
@@ -22,9 +23,9 @@ public class Avatar extends Drawing implements Runnable {
     boolean isFacingUp = false;
     boolean isFacingLeft= false;
     
-    boolean isAttack= false;
+    boolean isAttacking = false;
 
-    private ArrayList<Weapon> weapons;
+    private Weapon currentWeapon;
 
     public Avatar(){
         this.pos.setX(100.0);
@@ -84,7 +85,54 @@ public class Avatar extends Drawing implements Runnable {
             } else if (isFacingLeft) {
                 gc.drawImage(this.runLeft[this.frame], this.pos.getX(), this.pos.getY(), 50, 50);
             }
-        }else {
+        } else if (isAttacking) {
+            if (isFacingRight) {
+                gc.drawImage(this.attack[3], this.pos.getX(), this.pos.getY(), 50, 50);
+                //Dibujar arma
+                if (currentWeapon != null){
+                    currentWeapon.setFacingRight(true);
+                    currentWeapon.setFacingLeft(false);
+                    currentWeapon.setFacingUp(false);
+                    currentWeapon.setFacingDown(false);
+                    currentWeapon.pos.setX(pos.getX() + 48);
+                    currentWeapon.pos.setY(pos.getY()+23);
+                    currentWeapon.draw(gc);
+                }
+            } else if (isFacingDown) {
+                gc.drawImage(this.attack[0], this.pos.getX(), this.pos.getY(), 50, 50);
+                if (currentWeapon != null){
+                    currentWeapon.setFacingDown(true);
+                    currentWeapon.setFacingRight(false);
+                    currentWeapon.setFacingLeft(false);
+                    currentWeapon.setFacingUp(false);
+                    currentWeapon.pos.setX(pos.getX() + 4);
+                    currentWeapon.pos.setY(pos.getY() + 48);
+                    currentWeapon.draw(gc);
+                }
+            } else if (isFacingUp) {
+                gc.drawImage(this.attack[1], this.pos.getX(), this.pos.getY(), 50, 50);
+                if (currentWeapon != null){
+                    currentWeapon.setFacingUp(true);
+                    currentWeapon.setFacingRight(false);
+                    currentWeapon.setFacingLeft(false);
+                    currentWeapon.setFacingDown(false);
+                    currentWeapon.pos.setX(pos.getX() + 3);
+                    currentWeapon.pos.setY(pos.getY() - 23);
+                    currentWeapon.draw(gc);
+                }
+            } else if (isFacingLeft) {
+                gc.drawImage(this.attack[2], this.pos.getX(), this.pos.getY(), 50, 50);
+                if (currentWeapon != null){
+                    currentWeapon.setFacingLeft(true);
+                    currentWeapon.setFacingRight(false);
+                    currentWeapon.setFacingUp(false);
+                    currentWeapon.setFacingDown(false);
+                    currentWeapon.pos.setX(pos.getX()- 23);
+                    currentWeapon.pos.setY(pos.getY() + 23);
+                    currentWeapon.draw(gc);
+                }
+            }
+        } else {
             gc.drawImage(this.idle, this.pos.getX() , this.pos.getY() , 50 , 50 );
         }
     }
@@ -106,8 +154,17 @@ public class Avatar extends Drawing implements Runnable {
         }
     }
 
-    public void attack(){
 
+    //Recoger arma
+    public void pickUpWeapon(Weapon weapon) {
+        if (!weapon.isPickedUp()) {
+            currentWeapon = weapon;
+            weapon.setPickedUp(true);
+        }
+    }
+
+    public Rectangle2D getBoundingBox() {
+        return new Rectangle2D(pos.getX(), pos.getY(), 50, 50);
     }
 
     public boolean isMoving() {
@@ -144,5 +201,21 @@ public class Avatar extends Drawing implements Runnable {
 
     public void setFacingLeft(boolean facingLeft) {
         isFacingLeft = facingLeft;
+    }
+
+    public boolean isAttacking() {
+        return isAttacking;
+    }
+
+    public void setAttacking(boolean attacking) {
+        isAttacking = attacking;
+    }
+
+    public Weapon getCurrentWeapon() {
+        return currentWeapon;
+    }
+
+    public void setCurrentWeapon(Weapon currentWeapon) {
+        this.currentWeapon = currentWeapon;
     }
 }

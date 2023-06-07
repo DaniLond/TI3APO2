@@ -14,6 +14,7 @@ public class Projectile extends Drawing {
 
         int i;
         String uri;
+        this.projectiles= new Image[4];
         if (type==1){
             for(i = 1; i <= 4; ++i) {
                 uri = "file:" + HelloApplication.class.getResource("Attack/Projectiles/projectilUno/arrow-" + i + ".png").getPath();
