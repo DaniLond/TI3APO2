@@ -142,7 +142,6 @@ public class Avatar extends Drawing implements Runnable {
         while(true) {
             if (isMoving){
                 this.frame = (this.frame + 1) % 4;
-                System.out.println(frame);
             }else {
                 frame=0;
             }

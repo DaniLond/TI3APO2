@@ -20,6 +20,9 @@ public class Weapon extends Drawing {
 
 
     public Weapon(int type) {
+
+        this.projectiles = new ArrayList<>();
+
         int i;
         String uri;
         this.type= type;
@@ -88,5 +91,17 @@ public class Weapon extends Drawing {
 
     public void setPickedUp(boolean pickedUp) {
         isPickedUp = pickedUp;
+    }
+
+    public ArrayList<Projectile> getProjectiles() {
+        return projectiles;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

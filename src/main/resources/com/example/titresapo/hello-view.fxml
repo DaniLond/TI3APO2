@@ -3,9 +3,8 @@
 <?import javafx.scene.canvas.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane fx:controller="com.example.titresapo.HelloController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="528.0" prefWidth="906.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.titresapo.HelloController">
    <children>
-      <Canvas fx:id="canvas" height="400.0" width="600.0" />
+      <Canvas fx:id="canvas" height="528.0" width="906.0" />
    </children>
 </AnchorPane>

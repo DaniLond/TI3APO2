@@ -124,6 +124,11 @@ public class HelloController implements Initializable {
         double diffX = e.getX() - avatar.pos.getX();
         double diffY = e.getY() - avatar.pos.getY();
 
+        //Disparar
+        Vector diff = new Vector(diffX, diffY);
+        diff.normalize();
+        diff.setMag(4);
+
         if (Math.abs(diffX) > Math.abs(diffY)) {
             if (diffX > 0) {
                 avatar.setFacingRight(true);
@@ -147,21 +152,32 @@ public class HelloController implements Initializable {
                 avatar.setFacingDown(false);
                 avatar.setFacingLeft(false);
                 avatar.setFacingRight(false);
+
             }
         }
+
+        Weapon nearbyWeapon= null;
 
         //Recoger el arma dando clic en el avatar
         if (avatar.getBoundingBox().contains(e.getX(), e.getY())) {
             // Verificar si hay un arma cercana al hacer clic en el avatar
-            Weapon nearbyWeapon = getNearbyWeapon(avatar.pos.getX(), avatar.pos.getY());
+            nearbyWeapon = getNearbyWeapon(avatar.pos.getX(), avatar.pos.getY());
             if (nearbyWeapon != null) {
                 // El avatar recoge el arma
                 avatar.pickUpWeapon(nearbyWeapon);
                 weapons.remove(nearbyWeapon);
             }
         }
+
+        //Disparar
+        if (avatar.getCurrentWeapon() != null){
+            avatar.getCurrentWeapon().getProjectiles().add(
+                    new Projectile( new Vector(avatar.getCurrentWeapon().pos.getX() , avatar.getCurrentWeapon().pos.getY()), diff, avatar.getCurrentWeapon().getType())
+            );
+        }
         avatar.setMoving(true);
         avatar.setAttacking(true);
+
     }
 
     private void onMouseReleased(MouseEvent e) {
@@ -184,7 +200,14 @@ public class HelloController implements Initializable {
                         weapon.setFacingRight(true);
                     }
                     //
+
                     avatar.draw(gc);
+
+                    if (avatar.getCurrentWeapon() != null){
+                        for (int i=0; i < avatar.getCurrentWeapon().getProjectiles().size(); i++){
+                            avatar.getCurrentWeapon().getProjectiles().get(i).draw(gc);
+                        }
+                    }
 
                 });
 
