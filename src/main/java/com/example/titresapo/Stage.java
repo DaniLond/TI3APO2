@@ -13,10 +13,12 @@ public class Stage extends Drawing{
     private Canvas canvas;
     private GraphicsContext gc;
 
+    private ArrayList<Weapon> weapon;
 
     private Avatar avatar;
 
     public Stage(Canvas canvas, GraphicsContext gc, int id,Avatar avatar) {
+        weapon= new ArrayList<>();
         this.id=id;
         this.avatar=avatar;
         this.canvas=canvas;
@@ -48,4 +50,15 @@ public class Stage extends Drawing{
 
     }
 
+    public ArrayList<Weapon> getWeapon() {
+        return weapon;
+    }
+
+    public void setWeapon(ArrayList<Weapon> weapon) {
+        this.weapon = weapon;
+    }
+
+    public int getId() {
+        return id;
+    }
 }

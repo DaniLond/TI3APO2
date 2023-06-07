@@ -27,9 +27,7 @@ public class HelloController implements Initializable {
     private boolean Spressed = false;
     private boolean Dpressed = false;
 
-    //Arma aleatoria en el canvas
-    private ArrayList<Weapon> weapons = new ArrayList<>();
-    //
+
 
     private ArrayList<Stage> stages;
 
@@ -71,8 +69,8 @@ public class HelloController implements Initializable {
         generateRandomPosition(weapon);
         generateRandomPosition(weapon1);
         // Agregar el arma al ArrayList
-        weapons.add(weapon);
-        weapons.add(weapon1);
+        s1.getWeapon().add(weapon);
+        s1.getWeapon().add(weapon1);
 
         //
         this.draw();
@@ -90,7 +88,7 @@ public class HelloController implements Initializable {
         weapon.pos.setY(y);
     }
     public Weapon getNearbyWeapon(double x, double y) {
-        for (Weapon weapon : weapons) {
+        for (Weapon weapon : stages.get(0).getWeapon()) {
             double distance = Math.sqrt(Math.pow(x - weapon.pos.getX(), 2.0) + Math.pow(y - weapon.pos.getY(), 2.0));
             if (distance < 50.0) {
                 return weapon;
@@ -184,7 +182,7 @@ public class HelloController implements Initializable {
             if (nearbyWeapon != null) {
                 // El avatar recoge el arma
                 avatar.pickUpWeapon(nearbyWeapon);
-                weapons.remove(nearbyWeapon);
+                stages.get(0).getWeapon().remove(nearbyWeapon);
             }
         }
 
@@ -291,7 +289,7 @@ public class HelloController implements Initializable {
                     gc.fillRect(0,0, canvas.getWidth(), canvas.getHeight());
                     this.avatar.setMoving(this.Wpressed || this.Spressed || this.Dpressed || this.Apressed);
                     //Arma aleatoria en el canvas
-                    for (Weapon weapon : weapons) {
+                    for (Weapon weapon : stages.get(0).getWeapon()) {
                         weapon.draw(gc);
                         weapon.setFacingRight(true);
                     }
