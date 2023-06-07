@@ -50,12 +50,22 @@ public class HelloController implements Initializable {
         (new Thread(this.avatar)).start();
 
         Stage s1=new Stage(canvas, gc, 0, avatar);
+        s1.getEnemies().add(new Enemy(canvas, gc));
+        s1.getEnemies().add(new Enemy(canvas, gc));
+        s1.getEnemies().add(new Enemy(canvas, gc));
         s1.draw(gc);
 
+
         Stage s2= new Stage(canvas, gc, 1, avatar);
+        s2.getEnemies().add(new Enemy(canvas, gc));
+        s2.getEnemies().add(new Enemy(canvas, gc));
+        s2.getEnemies().add(new Enemy(canvas, gc));
         s2.draw(gc);
 
         Stage s3=new Stage(canvas, gc, 2, avatar);
+        s3.getEnemies().add(new Enemy(canvas, gc));
+        s3.getEnemies().add(new Enemy(canvas, gc));
+        s3.getEnemies().add(new Enemy(canvas, gc));
         s3.draw(gc);
 
         stages.add(s1);
@@ -297,6 +307,9 @@ public class HelloController implements Initializable {
 
                     avatar.draw(gc);
 
+                    for (int i = 0; i < 3; i++) {
+                        stage.getEnemies().get(i).draw(gc);
+                    }
 
                     if (avatar.getCurrentWeapon() != null){
                         for (int i=0; i < avatar.getCurrentWeapon().getProjectiles().size(); i++){

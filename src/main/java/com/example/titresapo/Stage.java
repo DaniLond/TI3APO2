@@ -14,15 +14,19 @@ public class Stage extends Drawing{
     private GraphicsContext gc;
 
     private ArrayList<Weapon> weapon;
+    ArrayList<Enemy> enemies;
 
     private Avatar avatar;
 
     public Stage(Canvas canvas, GraphicsContext gc, int id,Avatar avatar) {
+        this.canvas=canvas;
+        this.gc=gc;
         weapon= new ArrayList<>();
         this.id=id;
         this.avatar=avatar;
-        this.canvas=canvas;
-        this.gc=gc;
+        this.pos.setX(100.0);
+        this.pos.setY(100.0);
+        generateEnemies();
     }
 
 
@@ -60,5 +64,37 @@ public class Stage extends Drawing{
 
     public int getId() {
         return id;
+    }
+
+    public void generateEnemies(){
+        if (id==0){
+            enemies=new ArrayList<>();
+            gc.setFill(Color.YELLOW);
+            gc.fillRect(0,0, canvas.getWidth(), canvas.getHeight());
+            avatar.draw(gc);
+
+        }
+        if (id==1){
+            enemies=new ArrayList<>();
+            gc.setFill(Color.BLUE);
+            gc.fillRect(0,0, canvas.getWidth(), canvas.getHeight());
+            avatar.draw(gc);
+
+        }
+        if (id==2){
+            enemies=new ArrayList<>();
+            gc.setFill(Color.VIOLET);
+            gc.fillRect(0,0, canvas.getWidth(), canvas.getHeight());
+            avatar.draw(gc);
+
+        }
+    }
+
+    public ArrayList<Enemy> getEnemies() {
+        return enemies;
+    }
+
+    public void setEnemies(ArrayList<Enemy> enemies) {
+        this.enemies = enemies;
     }
 }
