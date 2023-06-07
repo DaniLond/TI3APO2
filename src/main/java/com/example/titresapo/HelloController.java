@@ -190,10 +190,34 @@ public class HelloController implements Initializable {
 
         //Disparar
         if (avatar.getCurrentWeapon() != null){
-            avatar.getCurrentWeapon().getProjectiles().add(
-                    new Projectile( new Vector(avatar.getCurrentWeapon().pos.getX() , avatar.getCurrentWeapon().pos.getY()), diff, avatar.getCurrentWeapon().getType())
-            );
+            Projectile projectileUno= null;
+
+            if (Math.abs(diffX) > Math.abs(diffY)) {
+                if (diffX > 0) {
+                    projectileUno= new Projectile( new Vector(avatar.pos.getX() + 60, avatar.pos.getY() + 25), diff , avatar.getCurrentWeapon().getType());
+
+                } else {
+                    projectileUno= new Projectile( new Vector(avatar.pos.getX() - 30 , avatar.pos.getY() + 25), diff, avatar.getCurrentWeapon().getType());
+                }
+            } else {
+                if (diffY > 0) {
+                    projectileUno= new Projectile( new Vector(avatar.pos.getX() + 5, avatar.pos.getY() + 60), diff, avatar.getCurrentWeapon().getType());
+
+                } else {
+                    projectileUno= new Projectile( new Vector(avatar.pos.getX()  , avatar.pos.getY() - 30), diff, avatar.getCurrentWeapon().getType());
+
+                }
+            }
+
+            avatar.getCurrentWeapon().getProjectiles().add(projectileUno);
+
+            // Iniciar los hilos de los proyectiles del arma actual del avatar
+            for (Projectile projectile : avatar.getCurrentWeapon().getProjectiles()) {
+                (new Thread(projectile)).start();
+            }
+
         }
+
         avatar.setMoving(true);
         avatar.setAttacking(true);
 

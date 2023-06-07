@@ -43,7 +43,7 @@ public class Projectile extends Drawing implements Runnable{
         while(true) {
              this.frame = (this.frame + 1) % 4;
             try {
-                Thread.sleep(80);
+                Thread.sleep(150);
             } catch (InterruptedException var2) {
                 throw new RuntimeException(var2);
             }
