@@ -31,6 +31,9 @@ public class HelloController implements Initializable {
     private ArrayList<Weapon> weapons = new ArrayList<>();
     //
 
+    private ArrayList<Stage> stages;
+
+    private int currentStage = 0;
 
     private Avatar avatar;
 
@@ -42,10 +45,26 @@ public class HelloController implements Initializable {
         this.canvas.setOnKeyReleased(this::onKeyReleased);
         canvas.setOnMousePressed(this::onMousePressed);
         this.canvas.setOnMouseReleased(this::onMouseReleased);
+
+        stages=new ArrayList<>();
+
         this.avatar = new Avatar();
         (new Thread(this.avatar)).start();
-        //Arma aleatoria en el canvas
 
+        Stage s1=new Stage(canvas, gc, 0, avatar);
+        s1.draw(gc);
+
+        Stage s2= new Stage(canvas, gc, 1, avatar);
+        s2.draw(gc);
+
+        Stage s3=new Stage(canvas, gc, 2, avatar);
+        s3.draw(gc);
+
+        stages.add(s1);
+        stages.add(s2);
+        stages.add(s3);
+
+        //Arma aleatoria en el canvas
         Weapon weapon = new Weapon(1);
         Weapon weapon1= new Weapon(2);
         // Configurar la posición aleatoria del arma
@@ -184,14 +203,67 @@ public class HelloController implements Initializable {
         avatar.setAttacking(false);
     }
 
+    private void moveValid(){
+
+        if(currentStage==0) {
+
+            if (avatar.pos.getX() < 25) {
+                avatar.pos.setX(25);
+            }
+            if(avatar.pos.getX()>canvas.getWidth()-25){
+                avatar.pos.setX(canvas.getWidth()-25);
+            }
+            if (avatar.pos.getY() > canvas.getHeight() - 25) {
+                avatar.pos.setY(canvas.getHeight() - 25);
+            }
+            if (avatar.pos.getY() < 0) {
+                currentStage=1;
+                avatar.pos.setY(canvas.getHeight());
+            }
+        }
+
+        if(currentStage==1){
+            if (avatar.pos.getX() < 25) {
+                avatar.pos.setX(25);
+            }
+            if(avatar.pos.getX()>canvas.getWidth()-25){
+                avatar.pos.setX(canvas.getWidth()-25);
+            }
+            if (avatar.pos.getY() > canvas.getHeight() - 25) {
+                avatar.pos.setY(canvas.getHeight() - 25);
+            }
+            if (avatar.pos.getY() < 0) {
+                currentStage=2;
+                avatar.pos.setY(canvas.getHeight());
+            }
+        }
+        if(currentStage==2){
+            if (avatar.pos.getX() < 25) {
+                avatar.pos.setX(25);
+            }
+            if(avatar.pos.getX()>canvas.getWidth()-25){
+                avatar.pos.setX(canvas.getWidth()-25);
+            }
+            if (avatar.pos.getY() > canvas.getHeight() - 25) {
+                avatar.pos.setY(canvas.getHeight() - 25);
+            }
+            if (avatar.pos.getY() < 25) {
+                avatar.pos.setY(25);
+            }
+        }
+
+    }
+
     public void draw(){
-        //
+
         Thread ae = new Thread(()->{
             while(isAlive){
                 //Dibujar en el lienzo
+                Stage stage= stages.get(currentStage);
+                moveValid();
                 Platform.runLater(()->{//Runnable
                     //Lo que hagamos aqui, corre en el main thread
-                    gc.setFill(Color.WHITE);
+                    stages.get(currentStage).draw(gc);
                     gc.fillRect(0,0, canvas.getWidth(), canvas.getHeight());
                     this.avatar.setMoving(this.Wpressed || this.Spressed || this.Dpressed || this.Apressed);
                     //Arma aleatoria en el canvas
@@ -202,6 +274,7 @@ public class HelloController implements Initializable {
                     //
 
                     avatar.draw(gc);
+
 
                     if (avatar.getCurrentWeapon() != null){
                         for (int i=0; i < avatar.getCurrentWeapon().getProjectiles().size(); i++){
