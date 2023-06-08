@@ -347,6 +347,8 @@ public class HelloController implements Initializable {
                     for (int i = 0; i < stage.getEnemies().size(); i++) {
                         stage.getEnemies().get(i).draw(gc);
                     }
+
+
                     for(int i=0; i<stage.getEnemies().size();i++){
                         (new Thread(stage.getEnemies().get(i))).start();
                     }

@@ -104,4 +104,7 @@ public class Stage extends Drawing{
     public ArrayList<Projectile> getProjectiles() {
         return projectiles;
     }
+
+
+
 }

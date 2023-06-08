@@ -2,6 +2,7 @@ package com.example.titresapo;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 public class Enemy extends Drawing implements Runnable{
@@ -10,25 +11,52 @@ public class Enemy extends Drawing implements Runnable{
     private GraphicsContext gc;
     private Avatar avatar;
 
+    private Image[] run;
+    private Image[] attack;
+    private int frame=0;
+
+    private boolean isNear=false;
+
     public Enemy(Canvas canvas, GraphicsContext gc, Avatar avatar) {
         this.canvas=canvas;
         this.gc=gc;
         this.avatar = avatar;
         generateRandomPosition();
+
+        run = new Image[8];
+
+        for (int i = 1; i <= 5; i++) {
+
+            String uri = "file:" + HelloApplication.class.getResource("Enemy/run/run-" + i + ".png").getPath();
+            run[i-1] = new Image(uri);
+        }
+
+        attack = new Image[8];
+
+        for (int i = 1; i <= 8; i++) {
+
+            String uri = "file:" + HelloApplication.class.getResource("Enemy/attack/attack-" + i + ".png").getPath();
+            attack[i-1] = new Image(uri);
+        }
+
+
     }
 
     @Override
     public void draw(GraphicsContext gc) {
-        gc.setFill(Color.BLACK);
-        gc.setStroke(Color.RED);
-        gc.fillRect(pos.getX(), pos.getY(), 50,50);
-        gc.strokeRect(pos.getX(), pos.getY(), 50,50);
+        if (isNear){
+            gc.drawImage(this.attack[frame], this.pos.getX(), this.pos.getY(),50, 50);
+        }else{
+            gc.drawImage(this.run[frame], this.pos.getX(), this.pos.getY(),50, 50);
+        }
+
 
     }
 
     @Override
     public void run() {
         while (true) {
+            this.frame = (this.frame + 1) % 5;
             // Calcula la dirección hacia el avatar
             Vector direction = calculateDirection();
 
