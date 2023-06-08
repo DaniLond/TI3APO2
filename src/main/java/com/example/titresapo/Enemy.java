@@ -133,7 +133,7 @@ public class Enemy extends Drawing implements Runnable{
     }
 
 
-
-
-
+    public ArrayList<Projectile> getProjectiles() {
+        return projectiles;
+    }
 }

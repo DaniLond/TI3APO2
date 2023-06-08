@@ -48,6 +48,8 @@ public class HelloController implements Initializable {
 
     private int bulletsInClip = 10;
 
+    private int count=0;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.gc = this.canvas.getGraphicsContext2D();
@@ -145,7 +147,6 @@ public class HelloController implements Initializable {
     }
 
     public void onKeyPressed(KeyEvent event) {
-        System.out.println(event.getCode());
         switch (event.getCode()) {
             case W:
                 Wpressed = true;
@@ -324,6 +325,15 @@ public class HelloController implements Initializable {
         gc.fillText(message, x, y);
     }
 
+    private void message(GraphicsContext gc) {
+        double x = canvas.getWidth()/2;
+        double y = canvas.getHeight()/2;
+        String message = "GAME OVER";
+        gc.setFill(Color.RED);
+        gc.setFont(new Font("Arial", 60));
+        gc.fillText(message, x, y);
+    }
+
     public void draw(){
 
         Thread ae = new Thread(()->{
@@ -405,6 +415,32 @@ public class HelloController implements Initializable {
                     }
                 }
 
+
+                // Colisiones
+                for (int i = 0; i < stage.getEnemies().size(); i++) {
+                    for (int j=0; j < stage.getEnemies().get(i).getProjectiles().size(); j++) {
+                        Projectile projectile = stage.getEnemies().get(i).getProjectiles().get(j);
+
+                        // Comprueba la colisión entre el proyectil y el avatar
+                        double distance = Math.sqrt(
+                                Math.pow(projectile.pos.getX() - avatar.pos.getX(), 2) +
+                                        Math.pow(projectile.pos.getY() - avatar.pos.getY(), 2)
+                        );
+
+                        if (distance < 25) {
+                            count++;
+                            System.out.println(count);
+                            if (count == 3) {
+                                stages.get(currentStage).draw(gc);
+                                gc.setFill(Color.BLACK);
+                                gc.fillRect(0,0,canvas.getWidth(), canvas.getHeight());
+                                message(gc);
+                                isAlive= false;
+                            }
+
+                        }
+                    }
+                }
 
                 if (this.Wpressed) {
                     this.avatar.setFacingDown(false);
