@@ -18,10 +18,13 @@ public class Weapon extends Drawing {
     boolean isFacingUp = false;
     boolean isFacingLeft= false;
 
+    private int maxBullets;
 
     public Weapon(int type) {
 
         this.projectiles = new ArrayList<>();
+
+        this.maxBullets= 10;
 
         int i;
         String uri;
@@ -104,4 +107,16 @@ public class Weapon extends Drawing {
     public void setType(int type) {
         this.type = type;
     }
+
+    public int getMaxBullets() {
+        return maxBullets;
+    }
+
+    public void setMaxBullets(int maxBullets) {
+        this.maxBullets = maxBullets;
+    }
+
+
 }
+
+

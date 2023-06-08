@@ -10,6 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -34,6 +35,8 @@ public class HelloController implements Initializable {
     private boolean Spressed = false;
     private boolean Dpressed = false;
 
+    private boolean Rpressed= false;
+
     private int contador=0;
 
     private ArrayList<Stage> stages;
@@ -41,6 +44,8 @@ public class HelloController implements Initializable {
     private int currentStage = 0;
 
     private Avatar avatar;
+
+    private int bulletsInClip = 10;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -132,6 +137,9 @@ public class HelloController implements Initializable {
             case D:
                 Dpressed = false;
                 break;
+            case R:
+                Rpressed= false;
+                break;
         }
     }
 
@@ -149,6 +157,9 @@ public class HelloController implements Initializable {
                 break;
             case D:
                 Dpressed = true;
+                break;
+            case R:
+                Rpressed= true;
                 break;
         }
     }
@@ -204,42 +215,48 @@ public class HelloController implements Initializable {
         }
 
         //Disparar
+
         if (avatar.getCurrentWeapon() != null){
-            Projectile projectileUno= null;
+            if (bulletsInClip <= avatar.getCurrentWeapon().getMaxBullets() && bulletsInClip > 0){
+                Projectile projectileUno= null;
 
-            if (Math.abs(diffX) > Math.abs(diffY)) {
-                if (diffX > 0) {
-                    projectileUno= new Projectile( new Vector(avatar.pos.getX() + 60, avatar.pos.getY() + 25), diff , avatar.getCurrentWeapon().getType());
+                if (Math.abs(diffX) > Math.abs(diffY)) {
+                    if (diffX > 0) {
+                        projectileUno= new Projectile( new Vector(avatar.pos.getX() + 60, avatar.pos.getY() + 25), diff , avatar.getCurrentWeapon().getType());
 
+                    } else {
+                        projectileUno= new Projectile( new Vector(avatar.pos.getX() - 30 , avatar.pos.getY() + 25), diff, avatar.getCurrentWeapon().getType());
+                    }
                 } else {
-                    projectileUno= new Projectile( new Vector(avatar.pos.getX() - 30 , avatar.pos.getY() + 25), diff, avatar.getCurrentWeapon().getType());
+                    if (diffY > 0) {
+                        projectileUno= new Projectile( new Vector(avatar.pos.getX() + 5, avatar.pos.getY() + 60), diff, avatar.getCurrentWeapon().getType());
+
+                    } else {
+                        projectileUno= new Projectile( new Vector(avatar.pos.getX()  , avatar.pos.getY() - 30), diff, avatar.getCurrentWeapon().getType());
+
+                    }
                 }
-            } else {
-                if (diffY > 0) {
-                    projectileUno= new Projectile( new Vector(avatar.pos.getX() + 5, avatar.pos.getY() + 60), diff, avatar.getCurrentWeapon().getType());
-
-                } else {
-                    projectileUno= new Projectile( new Vector(avatar.pos.getX()  , avatar.pos.getY() - 30), diff, avatar.getCurrentWeapon().getType());
-
+                avatar.getCurrentWeapon().getProjectiles().add(projectileUno);
+                // Iniciar los hilos de los proyectiles del arma actual del avatar
+                for (Projectile projectile : avatar.getCurrentWeapon().getProjectiles()) {
+                    (new Thread(projectile)).start();
                 }
+                stages.get(currentStage).getProjectiles().add(projectileUno);
+
+
+                // Disminuir la cantidad de proyectiles disparados
+                bulletsInClip--;
+
+                System.out.println(bulletsInClip);
             }
-
-            avatar.getCurrentWeapon().getProjectiles().add(projectileUno);
-
-            // Iniciar los hilos de los proyectiles del arma actual del avatar
-            for (Projectile projectile : avatar.getCurrentWeapon().getProjectiles()) {
-                (new Thread(projectile)).start();
-            }
-
-            stages.get(currentStage).getProjectiles().add(projectileUno);
-
 
         }
-
         avatar.setMoving(true);
         avatar.setAttacking(true);
 
     }
+
+
 
     private void onMouseReleased(MouseEvent e) {
         avatar.setAttacking(false);
@@ -296,6 +313,16 @@ public class HelloController implements Initializable {
 
     }
 
+    //Mensaje de recargar
+    private void drawReloadMessage(GraphicsContext gc) {
+        double x = avatar.pos.getX() + 2;
+        double y = avatar.pos.getY() - 10;
+        String message = "Recargue (R)";
+        gc.setFill(Color.RED);
+        gc.setFont(new Font("Arial", 14));
+        gc.fillText(message, x, y);
+    }
+
     public void draw(){
 
         Thread ae = new Thread(()->{
@@ -335,6 +362,10 @@ public class HelloController implements Initializable {
                             stage.getProjectiles().remove(i);
                             avatar.getCurrentWeapon().getProjectiles().remove(i);
                         }
+                    }
+
+                    if (avatar.getCurrentWeapon() != null && bulletsInClip == 0) {
+                        drawReloadMessage(gc);
                     }
 
                 });
@@ -401,6 +432,9 @@ public class HelloController implements Initializable {
                     this.avatar.setFacingUp(false);
                     this.avatar.setFacingRight(Dpressed);
                     this.avatar.pos.setX(this.avatar.pos.getX() + 3.0);
+                }
+                if (this.Rpressed){
+                    bulletsInClip= 10;
                 }
 
                 try {
