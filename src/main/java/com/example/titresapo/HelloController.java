@@ -27,6 +27,8 @@ public class HelloController implements Initializable {
     private boolean Spressed = false;
     private boolean Dpressed = false;
 
+    private int contador=0;
+
 
 
     private ArrayList<Stage> stages;
@@ -224,6 +226,9 @@ public class HelloController implements Initializable {
                 (new Thread(projectile)).start();
             }
 
+            stages.get(currentStage).getProjectiles().add(projectileUno);
+
+
         }
 
         avatar.setMoving(true);
@@ -307,7 +312,7 @@ public class HelloController implements Initializable {
 
                     avatar.draw(gc);
 
-                    for (int i = 0; i < 3; i++) {
+                    for (int i = 0; i < stage.getEnemies().size(); i++) {
                         stage.getEnemies().get(i).draw(gc);
                     }
 
@@ -317,9 +322,41 @@ public class HelloController implements Initializable {
                         }
                     }
 
+                    for (int i=0; i < stage.getProjectiles().size(); i++){
+                        if(isOutside(stage.getProjectiles().get(i).pos.getX(), stage.getProjectiles().get(i).pos.getY())){
+                            stage.getProjectiles().remove(i);
+                            avatar.getCurrentWeapon().getProjectiles().remove(i);
+                        }
+                    }
+
                 });
 
                 //Calculos geometricos
+
+                //Colisiones
+                for(int i=0 ; i< stage.getProjectiles().size() ; i++){
+                    Projectile bn = stage.getProjectiles().get(i);
+                    for(int j=0 ; j< stage.getEnemies().size() ; j++){
+                        Enemy en = stage.getEnemies().get(j);
+
+                        double distance = Math.sqrt(
+                                Math.pow(en.pos.getX()-bn.pos.getX(), 2) +
+                                        Math.pow(en.pos.getY()-bn.pos.getY(), 2)
+                        );
+
+                        if(distance < 30){
+                            contador++;
+                            stage.getProjectiles().remove(i);
+                            avatar.getCurrentWeapon().getProjectiles().remove(i);
+                            if (contador == 3){
+                                stage.getEnemies().remove(j);
+                                contador=0;
+                            }
+                        }
+
+                    }
+                }
+
                 if (this.Wpressed) {
                     this.avatar.setFacingDown(false);
                     this.avatar.setFacingLeft(false);
@@ -358,6 +395,10 @@ public class HelloController implements Initializable {
             }
         });
         ae.start();
+    }
+
+    public boolean isOutside(double x, double y){
+        return x<-10 || y<-10 || x>canvas.getWidth() || y>canvas.getHeight();
     }
 
 

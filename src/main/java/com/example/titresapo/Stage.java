@@ -18,8 +18,11 @@ public class Stage extends Drawing{
 
     private Avatar avatar;
 
+    private ArrayList<Projectile> projectiles;
+
     public Stage(Canvas canvas, GraphicsContext gc, int id,Avatar avatar) {
         this.canvas=canvas;
+        projectiles= new ArrayList<>();
         this.gc=gc;
         weapon= new ArrayList<>();
         this.id=id;
@@ -96,5 +99,9 @@ public class Stage extends Drawing{
 
     public void setEnemies(ArrayList<Enemy> enemies) {
         this.enemies = enemies;
+    }
+
+    public ArrayList<Projectile> getProjectiles() {
+        return projectiles;
     }
 }
