@@ -268,14 +268,14 @@ public class HelloController implements Initializable {
 
         if(currentStage==0) {
 
-            if (avatar.pos.getX() < 25) {
-                avatar.pos.setX(25);
+            if (avatar.pos.getX() < 1) {
+                avatar.pos.setX(1);
             }
-            if(avatar.pos.getX()>canvas.getWidth()-25){
-                avatar.pos.setX(canvas.getWidth()-25);
+            if(avatar.pos.getX()>canvas.getWidth()-50){
+                avatar.pos.setX(canvas.getWidth()-50);
             }
-            if (avatar.pos.getY() > canvas.getHeight() - 25) {
-                avatar.pos.setY(canvas.getHeight() - 25);
+            if (avatar.pos.getY() > canvas.getHeight() - 50) {
+                avatar.pos.setY(canvas.getHeight() - 50);
             }
             if (avatar.pos.getY() < 0) {
                 currentStage=1;
@@ -284,14 +284,14 @@ public class HelloController implements Initializable {
         }
 
         if(currentStage==1){
-            if (avatar.pos.getX() < 25) {
-                avatar.pos.setX(25);
+            if (avatar.pos.getX() < 1) {
+                avatar.pos.setX(1);
             }
-            if(avatar.pos.getX()>canvas.getWidth()-25){
-                avatar.pos.setX(canvas.getWidth()-25);
+            if(avatar.pos.getX()>canvas.getWidth()-50){
+                avatar.pos.setX(canvas.getWidth()-50);
             }
-            if (avatar.pos.getY() > canvas.getHeight() - 25) {
-                avatar.pos.setY(canvas.getHeight() - 25);
+            if (avatar.pos.getY() > canvas.getHeight() - 50) {
+                avatar.pos.setY(canvas.getHeight() - 50);
             }
             if (avatar.pos.getY() < 0) {
                 currentStage=2;
@@ -299,17 +299,17 @@ public class HelloController implements Initializable {
             }
         }
         if(currentStage==2){
-            if (avatar.pos.getX() < 25) {
-                avatar.pos.setX(25);
+            if (avatar.pos.getX() < 1) {
+                avatar.pos.setX(1);
             }
-            if(avatar.pos.getX()>canvas.getWidth()-25){
-                avatar.pos.setX(canvas.getWidth()-25);
+            if(avatar.pos.getX()>canvas.getWidth()-50){
+                avatar.pos.setX(canvas.getWidth()-50);
             }
-            if (avatar.pos.getY() > canvas.getHeight() - 25) {
-                avatar.pos.setY(canvas.getHeight() - 25);
+            if (avatar.pos.getY() > canvas.getHeight() - 50) {
+                avatar.pos.setY(canvas.getHeight() - 50);
             }
-            if (avatar.pos.getY() < 25) {
-                avatar.pos.setY(25);
+            if (avatar.pos.getY() < 1) {
+                avatar.pos.setY(1);
             }
         }
 
@@ -344,7 +344,7 @@ public class HelloController implements Initializable {
                 Platform.runLater(()->{//Runnable
                     //Lo que hagamos aqui, corre en el main thread
                     stages.get(currentStage).draw(gc);
-                    gc.fillRect(0,0, canvas.getWidth(), canvas.getHeight());
+                    //gc.fillRect(0,0, canvas.getWidth(), canvas.getHeight());
                     this.avatar.setMoving(this.Wpressed || this.Spressed || this.Dpressed || this.Apressed);
                     //Arma aleatoria en el canvas
                     for (Weapon weapon : stages.get(0).getWeapon()) {

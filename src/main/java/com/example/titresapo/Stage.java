@@ -2,6 +2,7 @@ package com.example.titresapo;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
@@ -19,6 +20,9 @@ public class Stage extends Drawing{
     private Avatar avatar;
 
     private ArrayList<Projectile> projectiles;
+    private Image stage1;
+    private Image stage2;
+    private Image stage3;
 
     public Stage(Canvas canvas, GraphicsContext gc, int id,Avatar avatar) {
         this.canvas=canvas;
@@ -30,6 +34,18 @@ public class Stage extends Drawing{
         this.pos.setX(100.0);
         this.pos.setY(100.0);
         generateEnemies();
+
+        String uri1;
+        uri1 = "file:" + HelloApplication.class.getResource("stage/stage1" + ".png").getPath();
+        stage1= new Image(uri1);
+
+        String uri2;
+        uri2 = "file:" + HelloApplication.class.getResource("stage/stage2" + ".jpg").getPath();
+        stage2= new Image(uri2);
+
+        String uri3;
+        uri3 = "file:" + HelloApplication.class.getResource("stage/stage3" + ".png").getPath();
+        stage3= new Image(uri3);
     }
 
 
@@ -37,20 +53,17 @@ public class Stage extends Drawing{
     public void draw(GraphicsContext gc) {
 
         if (id==0){
-            gc.setFill(Color.YELLOW);
-            gc.fillRect(0,0, canvas.getWidth(), canvas.getHeight());
+            gc.drawImage(stage3,0 , 0, canvas.getWidth(), canvas.getHeight());
             avatar.draw(gc);
 
         }
         if (id==1){
-            gc.setFill(Color.BLUE);
-            gc.fillRect(0,0, canvas.getWidth(), canvas.getHeight());
+            gc.drawImage(stage1,0 , 0, canvas.getWidth(), canvas.getHeight());
             avatar.draw(gc);
 
         }
         if (id==2){
-            gc.setFill(Color.VIOLET);
-            gc.fillRect(0,0, canvas.getWidth(), canvas.getHeight());
+            gc.drawImage(stage2,0 , 0, canvas.getWidth(), canvas.getHeight());
             avatar.draw(gc);
 
         }
