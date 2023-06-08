@@ -5,6 +5,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
+import java.util.ArrayList;
+
 public class Enemy extends Drawing implements Runnable{
 
     private Canvas canvas;
@@ -16,8 +18,14 @@ public class Enemy extends Drawing implements Runnable{
     private int frame=0;
 
     private boolean isNear=false;
+    private ArrayList<Projectile> projectiles;
+
+    private int shootTimer;
+    private int shootInterval;
 
     public Enemy(Canvas canvas, GraphicsContext gc, Avatar avatar) {
+        this.shootTimer=0;
+        this.shootInterval=60;
         this.canvas=canvas;
         this.gc=gc;
         this.avatar = avatar;
@@ -38,6 +46,8 @@ public class Enemy extends Drawing implements Runnable{
             String uri = "file:" + HelloApplication.class.getResource("Enemy/attack/attack-" + i + ".png").getPath();
             attack[i-1] = new Image(uri);
         }
+        projectiles=new ArrayList<>();
+        autoShoot();
 
 
     }
@@ -48,6 +58,9 @@ public class Enemy extends Drawing implements Runnable{
             gc.drawImage(this.attack[frame], this.pos.getX(), this.pos.getY(),50, 50);
         }else{
             gc.drawImage(this.run[frame], this.pos.getX(), this.pos.getY(),50, 50);
+        }
+        for (Projectile projectile : projectiles){
+            projectile.draw(gc);
         }
 
 
@@ -64,7 +77,7 @@ public class Enemy extends Drawing implements Runnable{
             pos.setX(pos.getX() + direction.getX());
             pos.setY(pos.getY() + direction.getY());
 
-            // Realiza cualquier otra lógica o verificaciones necesarias
+            autoShoot();
 
             try {
                 Thread.sleep(100000); // Espera un tiempo antes de la siguiente actualización
@@ -101,6 +114,24 @@ public class Enemy extends Drawing implements Runnable{
 
         return direction;
     }
+
+    public void autoShoot() {
+        shootTimer++;
+        if (shootTimer >= shootInterval) {
+            shootTimer = 0;
+
+            // Calcular dirección hacia el avatar
+            double direction = Math.atan2(avatar.pos.getY() - pos.getY(), avatar.pos.getX() - pos.getX());
+
+            // Calcular velocidad del proyectil
+            double speed = 5;  // Ajusta la velocidad según tus necesidades
+
+            // Crear objeto de proyectil y agregarlo a la lista de proyectiles activos
+            Projectile projectile = new Projectile(new Vector(pos.getX(), pos.getY()), calculateDirection(), 1);
+            projectiles.add(projectile);
+        }
+    }
+
 
 
 

@@ -38,6 +38,7 @@ public class HelloController implements Initializable {
     private boolean Rpressed= false;
 
     private int contador=0;
+    private int contadorAvatar=0;
 
     private ArrayList<Stage> stages;
 
@@ -403,6 +404,7 @@ public class HelloController implements Initializable {
 
                     }
                 }
+
 
                 if (this.Wpressed) {
                     this.avatar.setFacingDown(false);
