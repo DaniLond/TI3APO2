@@ -36,4 +36,11 @@ public class Vector {
         this.x *= (double)scalar;
         this.y *= (double)scalar;
     }
+
+    public Vector subtract(Vector v) {
+        double newX = this.x - v.getX();
+        double newY = this.y - v.getY();
+        return new Vector(newX, newY);
+    }
+
 }

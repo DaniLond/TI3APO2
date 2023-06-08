@@ -29,8 +29,6 @@ public class HelloController implements Initializable {
 
     private int contador=0;
 
-
-
     private ArrayList<Stage> stages;
 
     private int currentStage = 0;
@@ -52,22 +50,22 @@ public class HelloController implements Initializable {
         (new Thread(this.avatar)).start();
 
         Stage s1=new Stage(canvas, gc, 0, avatar);
-        s1.getEnemies().add(new Enemy(canvas, gc));
-        s1.getEnemies().add(new Enemy(canvas, gc));
-        s1.getEnemies().add(new Enemy(canvas, gc));
+        s1.getEnemies().add(new Enemy(canvas, gc, avatar));
+        s1.getEnemies().add(new Enemy(canvas, gc, avatar));
+        s1.getEnemies().add(new Enemy(canvas, gc, avatar));
         s1.draw(gc);
 
 
         Stage s2= new Stage(canvas, gc, 1, avatar);
-        s2.getEnemies().add(new Enemy(canvas, gc));
-        s2.getEnemies().add(new Enemy(canvas, gc));
-        s2.getEnemies().add(new Enemy(canvas, gc));
+        s2.getEnemies().add(new Enemy(canvas, gc, avatar));
+        s2.getEnemies().add(new Enemy(canvas, gc, avatar));
+        s2.getEnemies().add(new Enemy(canvas, gc, avatar));
         s2.draw(gc);
 
         Stage s3=new Stage(canvas, gc, 2, avatar);
-        s3.getEnemies().add(new Enemy(canvas, gc));
-        s3.getEnemies().add(new Enemy(canvas, gc));
-        s3.getEnemies().add(new Enemy(canvas, gc));
+        s3.getEnemies().add(new Enemy(canvas, gc, avatar));
+        s3.getEnemies().add(new Enemy(canvas, gc, avatar));
+        s3.getEnemies().add(new Enemy(canvas, gc, avatar));
         s3.draw(gc);
 
         stages.add(s1);
@@ -315,6 +313,9 @@ public class HelloController implements Initializable {
                     for (int i = 0; i < stage.getEnemies().size(); i++) {
                         stage.getEnemies().get(i).draw(gc);
                     }
+                    for(int i=0; i<stage.getEnemies().size();i++){
+                        (new Thread(stage.getEnemies().get(i))).start();
+                    }
 
                     if (avatar.getCurrentWeapon() != null){
                         for (int i=0; i < avatar.getCurrentWeapon().getProjectiles().size(); i++){
@@ -331,12 +332,11 @@ public class HelloController implements Initializable {
 
                 });
 
-                //Calculos geometricos
 
                 //Colisiones
                 for(int i=0 ; i< stage.getProjectiles().size() ; i++){
                     Projectile bn = stage.getProjectiles().get(i);
-                    for(int j=0 ; j< stage.getEnemies().size() ; j++){
+                    for(int j=0 ; j<stage.getEnemies().size() ; j++){
                         Enemy en = stage.getEnemies().get(j);
 
                         double distance = Math.sqrt(
@@ -346,10 +346,17 @@ public class HelloController implements Initializable {
 
                         if(distance < 30){
                             contador++;
-                            stage.getProjectiles().remove(i);
-                            avatar.getCurrentWeapon().getProjectiles().remove(i);
+                            if(avatar.getCurrentWeapon().getProjectiles().size()>0){
+                                stage.getProjectiles().remove(0);
+                            }
+
+                            if(avatar.getCurrentWeapon().getProjectiles().size()>0){
+                                avatar.getCurrentWeapon().getProjectiles().remove(0);
+                            }
+
                             if (contador == 3){
                                 stage.getEnemies().remove(j);
+                                j--;
                                 contador=0;
                             }
                         }
