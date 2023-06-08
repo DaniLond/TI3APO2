@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -19,6 +20,12 @@ public class HelloController implements Initializable {
     @FXML
     private Canvas canvas;
     private GraphicsContext gc;
+
+    @FXML
+    private ImageView Apuntador;
+
+    private boolean hasWeapon = false;
+    private boolean showApuntador = false;
 
     private boolean isAlive = true;
 
