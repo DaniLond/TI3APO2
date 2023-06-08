@@ -66,7 +66,7 @@ public class HelloController implements Initializable {
 
     private int bulletsInClip = 10;
 
-    private int count=0;
+    private int count=3;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -469,7 +469,6 @@ public class HelloController implements Initializable {
                             if (disparosRecibidos == 3) {
                                 Vida--; // Reducir la vida del jugador
                                 disparosRecibidos = 0; // Reiniciar el contador de disparos recibidos
-                                vida.setText("vida " + Vida); // Actualizar la etiqueta de vida en la interfaz gráfica
 
                                 if (Vida == 0) {
                                     stages.get(currentStage).draw(gc);
@@ -540,7 +539,6 @@ public class HelloController implements Initializable {
                 }
 
                 Platform.runLater(() -> {
-
                     vida.setText("Vida: " + Vida); // Actualizar etiqueta "vida" con el valor actualizado de Vida
                 });
 
@@ -583,13 +581,13 @@ public class HelloController implements Initializable {
                 );
 
                 if (distances < 25) {
-                    count++;
+                    count--;
+                    reduceVida();  // Reducir la vida del jugador
                     System.out.println(count);
-                    if (count == 3) {
+                    if (count == 0) {
                         stages.get(currentStage).draw(gc);
                         gc.setFill(Color.BLACK);
                         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-                        reduceVida();  // Reducir la vida del jugador
                     }
                 }
             }
@@ -619,7 +617,7 @@ public class HelloController implements Initializable {
 
     private void reduceVida() {
         Vida --;
-        vida.setText("Vidas: " + Vida);
+        vida.setText("Vidas: " + count);
         if (Vida <= 0) {
             isGameOver = true;
             Platform.runLater(() -> message(gc));
