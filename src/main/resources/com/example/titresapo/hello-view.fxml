@@ -2,21 +2,33 @@
 
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="528.0" prefWidth="906.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.titresapo.HelloController">
    <children>
-      <Canvas fx:id="canvas" height="528.0" width="906.0" />
-      <Label fx:id="Balas" layoutX="61.0" layoutY="25.0" prefHeight="17.0" prefWidth="157.0" text="Balas: " textFill="#eee9e9">
+      <Canvas fx:id="canvas" height="528.0" layoutX="-14.0" width="906.0" />
+      <Label fx:id="Balas" layoutX="87.0" layoutY="14.0" prefHeight="19.0" prefWidth="136.0" text="Balas: " textFill="#eee9e9">
          <font>
-            <Font size="22.0" />
+            <Font name="Arial Black" size="20.0" />
          </font>
       </Label>
-      <Label fx:id="vida" layoutX="61.0" layoutY="56.0" prefHeight="26.0" prefWidth="177.0" text="Vida" textFill="#e8dfdf">
+      <Label fx:id="vida" layoutX="87.0" layoutY="43.0" prefHeight="26.0" prefWidth="177.0" text="Vida: 10" textFill="#e8dfdf">
          <font>
-            <Font size="18.0" />
+            <Font name="Arial Black" size="15.0" />
          </font>
       </Label>
+      <ImageView fitHeight="29.0" fitWidth="28.0" layoutX="47.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@balasycorazon/corazon.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="29.0" fitWidth="36.0" layoutX="43.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@balasycorazon/otra%20bala.jfif" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

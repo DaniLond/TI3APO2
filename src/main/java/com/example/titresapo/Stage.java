@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class Stage extends Drawing{
 
@@ -15,7 +16,7 @@ public class Stage extends Drawing{
     private GraphicsContext gc;
 
     private ArrayList<Weapon> weapon;
-    ArrayList<Enemy> enemies;
+    static ArrayList<Enemy> enemies;
 
     private Avatar avatar;
 
@@ -47,6 +48,8 @@ public class Stage extends Drawing{
         uri3 = "file:" + HelloApplication.class.getResource("stage/stage3" + ".png").getPath();
         stage3= new Image(uri3);
     }
+
+
 
 
     @Override
@@ -106,13 +109,14 @@ public class Stage extends Drawing{
         }
     }
 
-    public ArrayList<Enemy> getEnemies() {
+    public static ArrayList<Enemy> getEnemies() {
         return enemies;
     }
 
     public void setEnemies(ArrayList<Enemy> enemies) {
         this.enemies = enemies;
     }
+
 
     public ArrayList<Projectile> getProjectiles() {
         return projectiles;

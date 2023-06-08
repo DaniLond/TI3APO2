@@ -3,6 +3,7 @@ package com.example.titresapo;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
@@ -22,12 +23,22 @@ public class HelloController implements Initializable {
     private Canvas canvas;
     private GraphicsContext gc;
 
+    private int disparosRecibidos = 0;
+    private boolean isGameOver = false;
+    @FXML
+    private ImageView bala;
+    @FXML
+    private ImageView coaraon;
+
+
+
+
     @FXML
     private Label Balas;
 
     @FXML
-    private Label Vida;
-    private int vida = 100;
+    private Label vida;
+    private int Vida = 3;
 
     @FXML
     private ImageView Apuntador;
@@ -60,14 +71,13 @@ public class HelloController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Balas.setText("Balas: " + bulletsInClip);
-
+        vida.setText("Vida:  " + Vida);
         this.gc = this.canvas.getGraphicsContext2D();
         this.canvas.setFocusTraversable(true);
         this.canvas.setOnKeyPressed(this::onKeyPressed);
         this.canvas.setOnKeyReleased(this::onKeyReleased);
         canvas.setOnMousePressed(this::onMousePressed);
         this.canvas.setOnMouseReleased(this::onMouseReleased);
-
         stages=new ArrayList<>();
 
         this.avatar = new Avatar();
@@ -280,9 +290,6 @@ public class HelloController implements Initializable {
         }
 
 
-
-
-
     }
 
 
@@ -361,14 +368,14 @@ public class HelloController implements Initializable {
         gc.fillText(message, x, y);
     }
 
-    public void draw(){
+    public void draw() {
 
-        Thread ae = new Thread(()->{
-            while(isAlive){
+        Thread ae = new Thread(() -> {
+            while (isAlive) {
                 //Dibujar en el lienzo
-                Stage stage= stages.get(currentStage);
+                Stage stage = stages.get(currentStage);
                 moveValid();
-                Platform.runLater(()->{//Runnable
+                Platform.runLater(() -> {//Runnable
                     //Lo que hagamos aqui, corre en el main thread
                     stages.get(currentStage).draw(gc);
                     //gc.fillRect(0,0, canvas.getWidth(), canvas.getHeight());
@@ -387,18 +394,18 @@ public class HelloController implements Initializable {
                     }
 
 
-                    for(int i=0; i<stage.getEnemies().size();i++){
+                    for (int i = 0; i < stage.getEnemies().size(); i++) {
                         (new Thread(stage.getEnemies().get(i))).start();
                     }
 
-                    if (avatar.getCurrentWeapon() != null){
-                        for (int i=0; i < avatar.getCurrentWeapon().getProjectiles().size(); i++){
+                    if (avatar.getCurrentWeapon() != null) {
+                        for (int i = 0; i < avatar.getCurrentWeapon().getProjectiles().size(); i++) {
                             avatar.getCurrentWeapon().getProjectiles().get(i).draw(gc);
                         }
                     }
 
-                    for (int i=0; i < stage.getProjectiles().size(); i++){
-                        if(isOutside(stage.getProjectiles().get(i).pos.getX(), stage.getProjectiles().get(i).pos.getY())){
+                    for (int i = 0; i < stage.getProjectiles().size(); i++) {
+                        if (isOutside(stage.getProjectiles().get(i).pos.getX(), stage.getProjectiles().get(i).pos.getY())) {
                             stage.getProjectiles().remove(i);
                             avatar.getCurrentWeapon().getProjectiles().remove(i);
                         }
@@ -412,30 +419,30 @@ public class HelloController implements Initializable {
 
 
                 //Colisiones
-                for(int i=0 ; i< stage.getProjectiles().size() ; i++){
+                for (int i = 0; i < stage.getProjectiles().size(); i++) {
                     Projectile bn = stage.getProjectiles().get(i);
-                    for(int j=0 ; j<stage.getEnemies().size() ; j++){
+                    for (int j = 0; j < stage.getEnemies().size(); j++) {
                         Enemy en = stage.getEnemies().get(j);
 
                         double distance = Math.sqrt(
-                                Math.pow(en.pos.getX()-bn.pos.getX(), 2) +
-                                        Math.pow(en.pos.getY()-bn.pos.getY(), 2)
+                                Math.pow(en.pos.getX() - bn.pos.getX(), 2) +
+                                        Math.pow(en.pos.getY() - bn.pos.getY(), 2)
                         );
 
-                        if(distance < 30){
+                        if (distance < 30) {
                             contador++;
-                            if(avatar.getCurrentWeapon().getProjectiles().size()>0){
+                            if (avatar.getCurrentWeapon().getProjectiles().size() > 0) {
                                 stage.getProjectiles().remove(0);
                             }
 
-                            if(avatar.getCurrentWeapon().getProjectiles().size()>0){
+                            if (avatar.getCurrentWeapon().getProjectiles().size() > 0) {
                                 avatar.getCurrentWeapon().getProjectiles().remove(0);
                             }
 
-                            if (contador == 3){
+                            if (contador == 3) {
                                 stage.getEnemies().remove(j);
                                 j--;
-                                contador=0;
+                                contador = 0;
                             }
                         }
 
@@ -445,7 +452,7 @@ public class HelloController implements Initializable {
 
                 // Colisiones
                 for (int i = 0; i < stage.getEnemies().size(); i++) {
-                    for (int j=0; j < stage.getEnemies().get(i).getProjectiles().size(); j++) {
+                    for (int j = 0; j < stage.getEnemies().get(i).getProjectiles().size(); j++) {
                         Projectile projectile = stage.getEnemies().get(i).getProjectiles().get(j);
 
                         // Comprueba la colisión entre el proyectil y el avatar
@@ -455,17 +462,39 @@ public class HelloController implements Initializable {
                         );
 
                         if (distance < 25) {
+                            disparosRecibidos++; // Incrementar el contador de disparos recibidos
+                            stage.getEnemies().get(i).getProjectiles().remove(j); // Eliminar el proyectil
+                            j--;
+
+                            if (disparosRecibidos == 3) {
+                                Vida--; // Reducir la vida del jugador
+                                disparosRecibidos = 0; // Reiniciar el contador de disparos recibidos
+                                vida.setText("vida " + Vida); // Actualizar la etiqueta de vida en la interfaz gráfica
+
+                                if (Vida == 0) {
+                                    stages.get(currentStage).draw(gc);
+                                    gc.setFill(Color.BLACK);
+                                    gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+                                    message(gc);
+                                    isAlive = false;
+                                }
+                            }
+                        }
+
+
+                        if (distance < 25) {
                             count++;
                             System.out.println(count);
                             if (count == 3) {
                                 stages.get(currentStage).draw(gc);
                                 gc.setFill(Color.BLACK);
-                                gc.fillRect(0,0,canvas.getWidth(), canvas.getHeight());
+                                gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
                                 message(gc);
-                                isAlive= false;
+                                isAlive = false;
                             }
 
                         }
+
                     }
                 }
 
@@ -500,31 +529,106 @@ public class HelloController implements Initializable {
                     this.avatar.setFacingRight(Dpressed);
                     this.avatar.pos.setX(this.avatar.pos.getX() + 3.0);
                 }
-                if (this.Rpressed){
-                    bulletsInClip= 10;
+                if (this.Rpressed) {
+                    bulletsInClip = 10;
                 }
 
                 try {
                     Thread.sleep(16);
-                } catch (InterruptedException e) {e.printStackTrace();}
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                Platform.runLater(() -> {
+
+                    vida.setText("Vida: " + Vida); // Actualizar etiqueta "vida" con el valor actualizado de Vida
+                });
+
             }
         });
         ae.start();
+        // Colisiones
+        double distance = 0;
+        for (int i = 0; i < Stage.getEnemies().size(); i++) {
+            for (int j = 0; j < Stage.getEnemies().get(i).getProjectiles().size(); j++) {
+                Projectile projectile = Stage.getEnemies().get(i).getProjectiles().get(j);
+
+                // Comprueba la colisión entre el proyectil y el avatar
+                distance = Math.sqrt(
+                        Math.pow(projectile.pos.getX() - avatar.pos.getX(), 2) +
+                                Math.pow(projectile.pos.getY() - avatar.pos.getY(), 2)
+                );
+
+                if (distance < 25) {
+                    disparosRecibidos++;
+                    if (disparosRecibidos == 3) {
+                        isGameOver = true;
+                        gc.setFill(Color.RED);
+                        gc.setFont(new Font("Arial", 60));
+                        gc.fillText("Game Over", canvas.getWidth() / 2 - 100, canvas.getHeight() / 2);
+                    }
+                }
+            }
+        }
+
+        // Colisiones
+        for (int i = 0; i < Stage.getEnemies().size(); i++) {
+            for (int j = 0; j < Stage.getEnemies().get(i).getProjectiles().size(); j++) {
+                Projectile projectile = Stage.getEnemies().get(i).getProjectiles().get(j);
+
+                // Comprueba la colisión entre el proyectil y el avatar
+                double distances = Math.sqrt(
+                        Math.pow(projectile.pos.getX() - avatar.pos.getX(), 2) +
+                                Math.pow(projectile.pos.getY() - avatar.pos.getY(), 2)
+                );
+
+                if (distances < 25) {
+                    count++;
+                    System.out.println(count);
+                    if (count == 3) {
+                        stages.get(currentStage).draw(gc);
+                        gc.setFill(Color.BLACK);
+                        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+                        reduceVida();  // Reducir la vida del jugador
+                    }
+                }
+            }
+        }
+
+
+
+        Platform.runLater(() -> {
+            if (isGameOver) {
+                message(gc);
+                isAlive = false;
+            }
+
+        });
+        Platform.runLater(() -> {
+
+            vida.setText("Vida: " + Vida); // Actualizar etiqueta "vida" con el valor actualizado de Vida
+        });
+
+
     }
+
 
     public boolean isOutside(double x, double y){
         return x<-10 || y<-10 || x>canvas.getWidth() || y>canvas.getHeight();
     }
 
-    private int calculateDamage() {
-        int baseDamage = 10;  // Daño base
-        int damageBonus = avatar.getCurrentWeapon().getDamageBonus();  // Bonificación de daño del arma actual
-
-        // Calcular daño total
-        int totalDamage = baseDamage + damageBonus;
-
-        return totalDamage;
+    private void reduceVida() {
+        Vida --;
+        vida.setText("Vidas: " + Vida);
+        if (Vida <= 0) {
+            isGameOver = true;
+            Platform.runLater(() -> message(gc));
+            isAlive = false;
+        }
     }
 
 
+
 }
+
+
