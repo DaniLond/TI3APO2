@@ -8,6 +8,8 @@ import java.util.ArrayList;
 
 public class Avatar extends Drawing implements Runnable {
     private Image idle;
+
+    private int life = 100; // Vida inicial del jugador
     private Image[] runRight;
 
     private Image[] runLeft;
@@ -216,5 +218,18 @@ public class Avatar extends Drawing implements Runnable {
 
     public void setCurrentWeapon(Weapon currentWeapon) {
         this.currentWeapon = currentWeapon;
+    }
+
+    public boolean isTouchedByEnemy() {
+        if (life > 0) {
+            reduceLife(1); // Reducir la vida en 1 cuando el avatar es tocado por un enemigo
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void reduceLife( int amount ) {
+        life -= amount;
     }
 }

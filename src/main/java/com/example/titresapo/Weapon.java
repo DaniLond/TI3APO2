@@ -116,6 +116,18 @@ public class Weapon extends Drawing {
         this.maxBullets = maxBullets;
     }
 
+    private int damageBonus;
+    // Otros atributos y métodos de la clase Weapon
+
+    public int getDamageBonus() {
+        return damageBonus;
+    }
+
+    public void setDamageBonus(int damageBonus) {
+        this.damageBonus = damageBonus;
+    }
+
+
 
 }
 

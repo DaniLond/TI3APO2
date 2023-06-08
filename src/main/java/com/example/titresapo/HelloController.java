@@ -23,6 +23,13 @@ public class HelloController implements Initializable {
     private GraphicsContext gc;
 
     @FXML
+    private Label Balas;
+
+    @FXML
+    private Label Vida;
+    private int vida = 100;
+
+    @FXML
     private ImageView Apuntador;
 
     private boolean hasWeapon = false;
@@ -52,6 +59,8 @@ public class HelloController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        Balas.setText("Balas: " + bulletsInClip);
+
         this.gc = this.canvas.getGraphicsContext2D();
         this.canvas.setFocusTraversable(true);
         this.canvas.setOnKeyPressed(this::onKeyPressed);
@@ -162,6 +171,11 @@ public class HelloController implements Initializable {
                 break;
             case R:
                 Rpressed= true;
+                // Recargar balas
+                if (Rpressed) {
+                    bulletsInClip = 10;
+                    Balas.setText("Balas: " + bulletsInClip);
+                }
                 break;
         }
     }
@@ -203,7 +217,7 @@ public class HelloController implements Initializable {
             }
         }
 
-        Weapon nearbyWeapon= null;
+        Weapon nearbyWeapon = null;
 
         //Recoger el arma dando clic en el avatar
         if (avatar.getBoundingBox().contains(e.getX(), e.getY())) {
@@ -218,23 +232,23 @@ public class HelloController implements Initializable {
 
         //Disparar
 
-        if (avatar.getCurrentWeapon() != null){
-            if (bulletsInClip <= avatar.getCurrentWeapon().getMaxBullets() && bulletsInClip > 0){
-                Projectile projectileUno= null;
+        if (avatar.getCurrentWeapon() != null) {
+            if (bulletsInClip <= avatar.getCurrentWeapon().getMaxBullets() && bulletsInClip > 0) {
+                Projectile projectileUno = null;
 
                 if (Math.abs(diffX) > Math.abs(diffY)) {
                     if (diffX > 0) {
-                        projectileUno= new Projectile( new Vector(avatar.pos.getX() + 60, avatar.pos.getY() + 25), diff , avatar.getCurrentWeapon().getType());
+                        projectileUno = new Projectile(new Vector(avatar.pos.getX() + 60, avatar.pos.getY() + 25), diff, avatar.getCurrentWeapon().getType());
 
                     } else {
-                        projectileUno= new Projectile( new Vector(avatar.pos.getX() - 30 , avatar.pos.getY() + 25), diff, avatar.getCurrentWeapon().getType());
+                        projectileUno = new Projectile(new Vector(avatar.pos.getX() - 30, avatar.pos.getY() + 25), diff, avatar.getCurrentWeapon().getType());
                     }
                 } else {
                     if (diffY > 0) {
-                        projectileUno= new Projectile( new Vector(avatar.pos.getX() + 5, avatar.pos.getY() + 60), diff, avatar.getCurrentWeapon().getType());
+                        projectileUno = new Projectile(new Vector(avatar.pos.getX() + 5, avatar.pos.getY() + 60), diff, avatar.getCurrentWeapon().getType());
 
                     } else {
-                        projectileUno= new Projectile( new Vector(avatar.pos.getX()  , avatar.pos.getY() - 30), diff, avatar.getCurrentWeapon().getType());
+                        projectileUno = new Projectile(new Vector(avatar.pos.getX(), avatar.pos.getY() - 30), diff, avatar.getCurrentWeapon().getType());
 
                     }
                 }
@@ -247,7 +261,6 @@ public class HelloController implements Initializable {
 
 
                 // Disminuir la cantidad de proyectiles disparados
-                bulletsInClip--;
 
                 System.out.println(bulletsInClip);
             }
@@ -255,6 +268,20 @@ public class HelloController implements Initializable {
         }
         avatar.setMoving(true);
         avatar.setAttacking(true);
+
+        if (avatar.getCurrentWeapon() != null) {
+            if (bulletsInClip >= 1) {
+
+                bulletsInClip--;
+
+
+                Balas.setText("Balas: " + bulletsInClip);
+            }
+        }
+
+
+
+
 
     }
 
@@ -487,6 +514,16 @@ public class HelloController implements Initializable {
 
     public boolean isOutside(double x, double y){
         return x<-10 || y<-10 || x>canvas.getWidth() || y>canvas.getHeight();
+    }
+
+    private int calculateDamage() {
+        int baseDamage = 10;  // Daño base
+        int damageBonus = avatar.getCurrentWeapon().getDamageBonus();  // Bonificación de daño del arma actual
+
+        // Calcular daño total
+        int totalDamage = baseDamage + damageBonus;
+
+        return totalDamage;
     }
 
 

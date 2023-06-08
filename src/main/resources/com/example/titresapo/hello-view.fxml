@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.canvas.Canvas?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="528.0" prefWidth="906.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.titresapo.HelloController">
    <children>
       <Canvas fx:id="canvas" height="528.0" width="906.0" />
-      <ImageView fx:id="Apuntador" fitHeight="30.0" fitWidth="39.0" layoutX="363.0" layoutY="249.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@reticula/Reticula.png" />
-         </image>
-      </ImageView>
+      <Label fx:id="Balas" layoutX="61.0" layoutY="25.0" prefHeight="17.0" prefWidth="157.0" text="Balas: " textFill="#eee9e9">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Label>
+      <Label fx:id="vida" layoutX="61.0" layoutY="56.0" prefHeight="26.0" prefWidth="177.0" text="Vida" textFill="#e8dfdf">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
